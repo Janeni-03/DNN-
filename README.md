@@ -19,19 +19,13 @@ Experiments were conducted using Google Colab with an NVIDIA Tesla T4 GPU.
 
 ## 2. How to Run
 
-Open the notebooks using the links below in Google Colab.
-
-### Notebook Links
-
-- [Problem 1 – RNN, LSTM and GRU](Problem1.ipynb)
-- [Problem 2 – Transformer from Scratch](Problem2.ipynb)
+Open the downloaded `.ipynb` files using Google Colab
 
 ### Execution Instructions
 
-1. Click the notebook link to open it in GitHub.
-2. Select **Open in Colab** (or upload the `.ipynb` file to Google Colab).
-3. Select **Runtime → Change runtime type → T4 GPU**.
-4. Execute all cells sequentially from top to bottom.
+1. Select **Open in Colab** (or upload the `.ipynb` file to Google Colab).
+2. Select **Runtime → Change runtime type → T4 GPU**.
+3. Execute all cells sequentially from top to bottom.
 
 ### Problem 1 – RNN, LSTM and GRU
 
