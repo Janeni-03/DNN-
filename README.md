@@ -1,91 +1,50 @@
-
-# README – RNN, LSTM, GRU and Transformer
-
-## 1. Environment
-
-Experiments were conducted using Google Colab with an NVIDIA Tesla T4 GPU.
-
-| Component | Version / Configuration |
-|---|---|
-| Python | 3.13.16 |
-| PyTorch | 2.14.1+cu130 |
-| NumPy | 2.4.6 |
-| Pandas | 2.2.3 |
-| Scikit-learn | 1.6.1 |
-| Matplotlib | 3.10.0 |
-| Seaborn | 0.13.2 |
-| GPU | NVIDIA Tesla T4 |
-
-
-## 2. How to Run
-
-Open the downloaded `.ipynb` files using Google Colab
-
-### Execution Instructions
-
-1. Select **Open in Colab** (or upload the `.ipynb` file to Google Colab).
-2. Select **Runtime → Change runtime type → T4 GPU**.
-3. Execute all cells sequentially from top to bottom.
-
-### Problem 1 – RNN, LSTM and GRU
-
-- **Data Pipeline:** Load and preprocess HAR data and generate the Adding Problem dataset.
-- **Recurrent Cells:** Implement and verify custom RNN, LSTM, and GRU cells.
-- **HAR Classification:** Train and evaluate all three models.
-- **Adding Problem:** Evaluate sequence lengths 50, 100, 200, and 400.
-- **Gradient and Ablation:** Analyze gradient flow, hidden sizes, and gradient clipping.
-
-### Problem 2 – Transformer from Scratch
-
-- **Attention:** Implement and verify scaled dot-product attention and masking.
-- **Transformer Encoder:** Implement multi-head attention, encoder blocks, and positional encoding.
-- **HAR Classification:** Train and evaluate the Transformer (executed in Problem 1).
-- **Language Model:** Train on Tiny Shakespeare and generate text at different temperatures.
-- **Ablation Analysis:** Evaluate attention heads, positional encoding, causal masking, runtime, and memory.
-
-## 3. Execution Time on T4
-
-| Experiment | Execution Time |
-|---|---|
-| Problem 1 | Approximately 30–60 minutes (estimated) |
-| Problem 2 – Tiny Shakespeare training | Approximately 10 minutes (estimated) |
-| Problem 2 – Complete runtime | Approximately 15 minutes (estimated) |
-
-## 4. Student's Variant and Implementation
+# DNN Programming Assignment-2 – RNN, LSTM, GRU and Transformer
 
 **Student ID:** 2026AJ05924
 
-- Implemented custom `MyRNNCell`, `MyLSTMCell`, and `MyGRUCell` using matrix operations and verified them against PyTorch with differences below 10⁻⁵.
-- Implemented Transformer attention, multi-head attention, causal masking, pre-LayerNorm encoder blocks, and positional encoding from scratch.
-- Attention verification achieved a maximum difference of approximately 2.38 × 10⁻⁷.
+## 1. Environment
+Google Colab, NVIDIA T4 GPU. NumPy: `2.4.6`, Pandas: `2.2.3`, Scikit-learn: `1.6.1`, Matplotlib: `3.10.0`, Seaborn: `0.13.2`, PyTorch: `2.14.1+cpu`. small GPU run-to-run differences are expected.
 
-## 5. Main Results
+## 2. How to run
+1. **Upload the UCI HAR zip first.** In Colab, open the Files panel (left sidebar), click Upload, and select `har.zip` (the file downloaded from the UCI "Human Activity Recognition Using Smartphones" page). Put it in the same working directory as the notebook, with this exact name. It is not included in my submission because the brief says not to include datasets.
+2. Open `problem1/problem1.ipynb` (or `problem2/problem2.ipynb`) in Google Colab.
+3. Runtime → Change runtime type → T4 GPU.
+4. Runtime → Restart and run all.
 
-| Experiment | Result |
-|---|---:|
-| RNN HAR accuracy | 74.54% |
-| LSTM HAR accuracy | 88.47% |
-| GRU HAR accuracy | 88.15% |
-| Transformer training loss | 1.4055 nats |
-| Transformer validation loss | 1.5962 nats |
-| Tiny Shakespeare training time | 170.53 seconds |
+The notebook extracts `har.zip` automatically, including the inner `UCI HAR Dataset.zip` if present. Tiny Shakespeare is downloaded automatically (internet needed); the adding-problem data is generated in code. Problem 2 Task A (HAR encoder classifier) is in `problem1/problem1.ipynb` and reuses the Problem 1 data pipeline. Each notebook is submitted with its outputs saved.
 
-## 6. Known Limitations
+## 3. Total run time on a T4 (Restart and Run All)
+| Notebook | Time |
+|---|---|
+| problem1.ipynb | [measured, e.g. 42 min] |
+| problem2.ipynb | [measured, e.g. 28 min] (Tiny Shakespeare training alone: 170.5 s) |
 
-- GPU availability and execution time depend on Colab resources.
-- Dataset downloads require internet access.
-- Long sequences increase computation and memory usage.
-- Results may vary across random seeds and hardware.
-- Higher generation temperatures reduce text coherence.
-- Problem 2 HAR accuracy and some ablation results should be taken from the executed notebooks and CSV files.
+## 4. My variant
+- **Hidden size (Problem 1):** 64
+- **Transformer width / seeds:** 128 / (0, 1, 2)
+- **Problem 1 Task 5(c) ablation:** Gradient clipping (norm 1.0 vs. no clipping) for the vanilla RNN at T = 200.
+- **Epoch budget:**
+  - Task 5(a): 30 epochs for RNN, LSTM, and GRU.
+  - Task 5(b): 20 epochs for LSTM and GRU hidden-size sweeps.
+  - Task 5(c): 30 epochs for both clipping conditions.
 
-## 7. Project Files
+## 5. Assumptions
+- The UCI HAR zip must be uploaded manually to the Colab working directory as `har.zip` before running (see section 2). Colab deletes it when the session ends, so re-upload after a disconnect.
+- All experiments were conducted using Python and PyTorch.
+- CUDA was used for GPU acceleration where available.
+- Random seeds (0, 1, and 2) were used to evaluate model performance across multiple runs.
 
+### Known Issues
+- Model performance may vary slightly depending on random initialization and hardware.
+- Transformer models have significantly more trainable parameters than recurrent models and require more computation per epoch.
+- Transformer performance can be sensitive to positional encoding, attention configuration, and hyperparameter choices.
+
+## 6. Files
 | File | Description |
 |---|---|
-| `Problem1.ipynb` | RNN, LSTM, GRU and Adding Problem experiments |
-| `Problem2.ipynb` | Transformer and Tiny Shakespeare experiments |
-| `results.csv` | Experimental results |
-| `requirements.txt` | Python dependencies |
-| `figures/` | Generated plots and visualizations |
-| `results/` | Additional experimental outputs |
+| `report.pdf` | Report (max 6 pages) |
+| `results.csv` | One row per run, in the required columns |
+| `requirements.txt` | Exact package versions |
+| `problem1/problem1.ipynb`, `problem1/figures/` | RNN/LSTM/GRU notebook and plots |
+| `problem2/problem2.ipynb`, `problem2/figures/` | Transformer notebook and plots |
+| `problem2/generated_samples.txt` | Three 500-character samples (T = 0.2, 0.8, 1.5) |
